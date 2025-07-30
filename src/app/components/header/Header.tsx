@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './Header.scss';
 import DatePicker from 'react-datepicker';
 import Icon from '@/app/utils/Icon';
+import { formatDateLocal } from '@/app/utils/utility';
+import InputReactDatePicker from '@/app/utils/InputReactDatePicker';
 
 const sortOptions = [
   { value: 'severity', label: 'Sort by Severity' },
@@ -14,8 +16,8 @@ interface IHeader {
   onSortChange: (value: string) => void,
   searchQuery: string,
   onSearchChange: (value: string) => void,
-  fromDate?: Date,
-  toDate?: Date,
+  fromDate: Date | null,
+  toDate: Date | null,
   onFromChange: (date: Date | null, event: React.SyntheticEvent<any> | undefined) => void
   onToChange: (date: Date | null, event: React.SyntheticEvent<any> | undefined) => void
 }
@@ -48,7 +50,7 @@ const Header: React.FC<IHeader> = ({
                 onChange={onFromChange}
                 placeholderText="From"
                 className="header__date-picker"
-                dateFormat="yyyy-MM-dd"
+                customInput={<InputReactDatePicker value={fromDate?.toLocaleString() || ""} placeholder='From' />}
                 maxDate={toDate || new Date()}
               />
               <DatePicker
@@ -56,8 +58,8 @@ const Header: React.FC<IHeader> = ({
                 onChange={onToChange}
                 placeholderText="To"
                 className="header__date-picker"
-                dateFormat="yyyy-MM-dd"
-                minDate={fromDate}
+                customInput={<InputReactDatePicker value={toDate?.toDateString() || ""} placeholder="to" />}
+                minDate={fromDate || undefined}
                 maxDate={new Date()}
               />
             </div>

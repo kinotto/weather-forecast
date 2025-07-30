@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './AlertGrid.scss'
 import { useQuery } from '@tanstack/react-query'
 import { getForecastApi } from '@/app/api/api'
@@ -6,7 +6,7 @@ import { AlertFeature, AlertResponse } from '@/app/model/alert'
 import Loader from '../loader/Loader'
 import AlertDetailsModal from '../alert-details-modal/AlertDetailsModal'
 import Header from '../header/Header'
-import { formatDateLocal } from '@/app/utils/utility'
+import { filterByDate, formatDateLocal } from '@/app/utils/utility'
 
 
 const AlertGrid: React.FC = () => {
@@ -15,25 +15,46 @@ const AlertGrid: React.FC = () => {
   const { data, isLoading, isError} = useQuery<AlertResponse>({
     queryKey: [],
     queryFn: getForecastApi,
-    refetchInterval: 20000 // simulate a websocket type of app with real time updates
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchInterval: false
   })
+  const [filteredAlertFeatures, setFilteredAlertFeatures] = useState<Array<AlertFeature>>([]);
   const [selectedAlert, setSelectedAlert] = React.useState<AlertFeature | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [fromDate, setFromDate] = useState<Date | null>(null);
+  const [toDate, setToDate] = useState<Date | null>(null);
 
+  useEffect(() => setFilteredAlertFeatures(data?.features || []), [data])
 
+  if (isError) {
+    // show error
+  }
 
   if (isLoading) {
     return <Loader />
   }
+
 
   return (
     <div className="alert-grid">
       <Header
         sortBy="severity"
         onSortChange={() => {}}
-        searchQuery={"whatever"}
-        onSearchChange={() => {}}
-        onFromChange={() => {}}
-        onToChange={() => {}}
+        searchQuery={searchQuery}
+        onSearchChange={query => {
+          setSearchQuery(query);
+        }}
+        fromDate={fromDate}
+        toDate={toDate}
+        onFromChange={(_fromDate) => {
+          setFromDate(_fromDate);
+          setFilteredAlertFeatures(filterByDate(_fromDate, toDate, data?.features || []))
+        }}
+        onToChange={(_toDate) => {
+          setToDate(_toDate);
+          setFilteredAlertFeatures(filterByDate(fromDate, _toDate, data?.features || []))
+        }}
       />
       <table>
         <thead>
@@ -47,7 +68,7 @@ const AlertGrid: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {data?.features.map((el: AlertFeature) => (
+          {filteredAlertFeatures.map((el: AlertFeature) => (
             <tr 
               key={el.id}
               onClick={() => setSelectedAlert(el)}
