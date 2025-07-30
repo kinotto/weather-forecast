@@ -1,0 +1,93 @@
+.alert-grid {
+  padding: 2rem;
+  background: #fafafa;
+  border-radius: 10px;
+
+  & > h2 {
+    margin-bottom: 1.25rem;
+    color: #202124;
+    font-weight: 600;
+    font-size: 1.5rem;
+    font-family: 'Inter', sans-serif;
+  }
+
+  table {
+    width: 100%;
+    margin-top: 60px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(60, 64, 67, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: #3c4043;
+  }
+
+  th,
+  td {
+    padding: 0.85rem 1.25rem;
+    text-align: left;
+  }
+
+  th {
+    background: #f1f3f4;
+    font-weight: 600;
+    color: #5f6368;
+    border-bottom: 2px solid #e8eaed;
+    user-select: none;
+  }
+
+  tr {
+    transition: background-color 0.3s ease;
+  }
+
+  tr:hover {
+    background-color: #f8f9fa;
+    cursor: pointer;
+  }
+
+  td {
+    border-bottom: 1px solid #e8eaed;
+    vertical-align: middle;
+  }
+
+  /* Severity badges */
+  &-severity {
+    display: inline-block;
+    min-width: 72px;
+    text-align: center;
+    font-weight: 600;
+    color: #fff;
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    border-radius: 16px;
+    text-transform: capitalize;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+    user-select: none;
+    transition: background-color 0.25s ease;
+
+    &-extreme {
+      background-color: #d93025; // Google red 700
+    }
+
+    &-severe {
+      background-color: #ea4335; // Google red 600
+    }
+
+    &-moderate {
+      background-color: #fbbc04; // Google yellow 600
+      color: #3c4043; // darker text for contrast
+    }
+
+    &-minor {
+      background-color: #34a853; // Google green 600
+    }
+
+    &-unknown {
+      background-color: #9aa0a6; // Google grey 500
+    }
+  }
+}

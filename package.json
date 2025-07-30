@@ -1,0 +1,47 @@
+{
+  "name": "testmovie",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^4.40.1",
+    "date-fns": "^4.1.0",
+    "next": "^15.4.2",
+    "node-fetch": "^2.7.0",
+    "react": "^19.0.0",
+    "react-datepicker": "^8.4.0",
+    "react-day-picker": "^9.8.1",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.27.2",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
+    "@eslint/eslintrc": "^3",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/testing-library__jest-dom": "^5.14.9",
+    "babel-jest": "^30.0.2",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.2",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^30.0.3",
+    "jest-environment-jsdom": "^30.0.2",
+    "jest-mock": "^30.0.2",
+    "sass": "^1.87.0",
+    "typescript": "^5",
+    "whatwg-fetch": "^3.6.20"
+  }
+}
