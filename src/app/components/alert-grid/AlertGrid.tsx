@@ -1,64 +1,85 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import './AlertGrid.scss'
 import { AlertFeature } from '@/app/model/alert'
 import { formatDateLocal } from '@/app/utils/utility'
+import { FixedSizeList as List, ListChildComponentProps } from 'react-window'
 
 interface IAlertGrid {
   alerts: Array<AlertFeature>,
   onSelectAlert: (el: AlertFeature) => void
 }
 
+const ROW_HEIGHT = 100 // fixed row height in px (adjust if needed)
+
 const AlertGrid: React.FC<IAlertGrid> = ({ alerts, onSelectAlert }) => {
+
+  // Row renderer for react-window, memoized for perf
+  const Row = useCallback(({ index, style }: ListChildComponentProps) => {
+    const el = alerts[index]
+
+    return (
+      <div
+        key={el.id}
+        className="alert-grid__row"
+        style={style} // IMPORTANT for react-window positioning
+        onClick={() => onSelectAlert(el)}
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            onSelectAlert(el)
+          }
+        }}
+        role="row"
+        aria-label={`View details for ${el.properties.event}`}
+      >
+        <div role="gridcell">{el.properties.event}</div>
+        <div role="gridcell">
+          <div
+            className={`alert-grid-severity alert-grid-severity-${el.properties.severity.toLowerCase()}`}
+          >
+            {el.properties.severity}
+          </div>
+        </div>
+        <div role="gridcell">
+          {el.properties.areaDesc.length > 100
+            ? el.properties.areaDesc.slice(0, 100) + '...'
+            : el.properties.areaDesc}
+        </div>
+        <div role="gridcell">{formatDateLocal(el.properties.effective)}</div>
+        <div role="gridcell">{formatDateLocal(el.properties.expires)}</div>
+        <div role="gridcell">
+          {(el.properties?.headline?.length || 0) > 100
+            ? (el.properties?.headline || '').slice(0, 100) + '...'
+            : el.properties?.headline}
+        </div>
+      </div>
+    )
+  }, [alerts, onSelectAlert])
+
   return (
-    <div className="alert-grid">
+    <div className="alert-grid" role="grid" aria-rowcount={alerts.length + 1}>
       <div className="alert-grid__table">
-        <div className="alert-grid__header">
-          <div>Event</div>
-          <div>Severity</div>
-          <div>Area</div>
-          <div>Effective</div>
-          <div>Expires</div>
-          <div>Headline</div>
+        <div className="alert-grid__header" role="row">
+          <div role="columnheader">Event</div>
+          <div role="columnheader">Severity</div>
+          <div role="columnheader">Area</div>
+          <div role="columnheader">Effective</div>
+          <div role="columnheader">Expires</div>
+          <div role="columnheader">Headline</div>
         </div>
         <div className="alert-grid__body">
-          {alerts.map((el: AlertFeature) => (
-            <div
-              key={el.id}
-              className="alert-grid__row"
-              onClick={() => onSelectAlert(el)}
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  onSelectAlert(el);
-                }
-              }}
-            >
-              <div>{el.properties.event}</div>
-              <div>
-                <div
-                  className={`alert-grid-severity alert-grid-severity-${el.properties.severity.toLowerCase()}`}
-                >
-                  {el.properties.severity}
-                </div>
-              </div>
-              <div>
-                {el.properties.areaDesc.length > 100
-                  ? el.properties.areaDesc.slice(0, 100) + '...'
-                  : el.properties.areaDesc}
-              </div>
-              <div>{formatDateLocal(el.properties.effective)}</div>
-              <div>{formatDateLocal(el.properties.expires)}</div>
-              <div>
-                {(el.properties?.headline?.length || 0) > 100
-                  ? (el.properties?.headline || '').slice(0, 100) + '...'
-                  : el.properties?.headline}
-              </div>
-            </div>
-          ))}
+          <List
+            height={Math.min(window.innerHeight, ROW_HEIGHT * alerts.length)} // max height or smaller if few items
+            itemCount={alerts.length}
+            itemSize={ROW_HEIGHT}
+            width="100%"
+            overscanCount={5} // render some extra rows for smooth scrolling
+          >
+            {Row}
+          </List>
         </div>
       </div>
     </div>
-
   )
 }
 
