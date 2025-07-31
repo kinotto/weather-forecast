@@ -1,19 +1,25 @@
 import React, { useState } from 'react';
+import '../../styles/datepicker.scss';
+import 'react-datepicker/dist/react-datepicker.css';
 import './Header.scss';
 import DatePicker from 'react-datepicker';
 import Icon from '@/app/utils/Icon';
-import { formatDateLocal } from '@/app/utils/utility';
+
 import InputReactDatePicker from '@/app/utils/InputReactDatePicker';
+import { Filter } from '@/app/model/alert';
 
 const sortOptions = [
-  { value: 'severity', label: 'Sort by Severity' },
-  { value: 'date', label: 'Sort by Date' },
-  { value: 'location', label: 'Sort by Location' },
+  { value: Filter.event, label: 'Sort by Event' },
+  { value: Filter.severity, label: 'Sort by Severity' },
+  { value: Filter.area, label: 'Sort by Area' },
+  { value: Filter.effectiveDate, label: 'Sort by Effective date' },
+  { value: Filter.expiryDate, label: 'Sort by Expiry date' },
+  { value: Filter.headline, label: 'Sort by Headline' },
 ];
 
 interface IHeader {
-  sortBy: string,
-  onSortChange: (value: string) => void,
+  sortBy: Filter,
+  onSortChange: (value: Filter) => void,
   searchQuery: string,
   onSearchChange: (value: string) => void,
   fromDate: Date | null,
@@ -69,6 +75,7 @@ const Header: React.FC<IHeader> = ({
               onChange={e => onSortChange(e.target.value)}
               aria-label="Sort alerts"
             >
+              <option value="" disabled >Select a filter</option>
               {sortOptions.map(opt => (
                 <option key={opt.value} value={opt.value}>
                   {opt.label}
