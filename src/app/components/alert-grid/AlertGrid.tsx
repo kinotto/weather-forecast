@@ -1,66 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import './AlertGrid.scss'
-import { useQuery } from '@tanstack/react-query'
-import { getForecastApi } from '@/app/api/api'
-import { AlertFeature, AlertResponse, Filter } from '@/app/model/alert'
-import Loader from '../loader/Loader'
-import AlertDetailsModal from '../alert-details-modal/AlertDetailsModal'
-import Header from '../header/Header'
-import { applyAllFilters, formatDateLocal } from '@/app/utils/utility'
+import { AlertFeature } from '@/app/model/alert'
+import { formatDateLocal } from '@/app/utils/utility'
 
+interface IAlertGrid {
+  alerts: Array<AlertFeature>,
+  onSelectAlert: (el: AlertFeature) => void
+}
 
-const AlertGrid: React.FC = () => {
-
-
-  const { data, isLoading, isError } = useQuery<AlertResponse>({
-    queryKey: [],
-    queryFn: getForecastApi,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    refetchInterval: false
-  })
-  const [filteredAlertFeatures, setFilteredAlertFeatures] = useState<Array<AlertFeature>>([]);
-  const [selectedAlert, setSelectedAlert] = React.useState<AlertFeature | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [fromDate, setFromDate] = useState<Date | null>(null);
-  const [toDate, setToDate] = useState<Date | null>(null);
-  const [selectedFilter, setSelectedFilter] = useState<Filter>(Filter.default);
-
-  useEffect(() => setFilteredAlertFeatures(data?.features || []), [data])
-
-  if (isError) {
-    // show error
-  }
-
-  if (isLoading) {
-    return <Loader />
-  }
-
-
+const AlertGrid: React.FC<IAlertGrid> = ({ alerts, onSelectAlert }) => {
   return (
     <div className="alert-grid">
-      <Header
-        sortBy={selectedFilter}
-        onSortChange={newFilter => {
-          setSelectedFilter(newFilter);
-          setFilteredAlertFeatures(applyAllFilters(data?.features || [], fromDate, toDate, newFilter, searchQuery));
-        }}
-        searchQuery={searchQuery}
-        onSearchChange={query => {
-          setSearchQuery(query);
-          setFilteredAlertFeatures(applyAllFilters(data?.features || [], fromDate, toDate, selectedFilter, query));
-        }}
-        fromDate={fromDate}
-        toDate={toDate}
-        onFromChange={(_fromDate) => {
-          setFromDate(_fromDate);
-          setFilteredAlertFeatures(applyAllFilters(data?.features || [], _fromDate, toDate, selectedFilter, searchQuery));
-        }}
-        onToChange={(_toDate) => {
-          setToDate(_toDate);
-          setFilteredAlertFeatures(applyAllFilters(data?.features || [], fromDate, _toDate, selectedFilter, searchQuery));
-        }}
-      />
       <table>
         <thead>
           <tr>
@@ -73,16 +23,16 @@ const AlertGrid: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredAlertFeatures.map((el: AlertFeature) => (
+          {alerts.map((el: AlertFeature) => (
             <tr
               key={el.id}
-              onClick={() => setSelectedAlert(el)}
+              onClick={() => onSelectAlert(el)}
               style={{ cursor: 'pointer' }}
               aria-label={`View details for ${el.properties.event}`}
               tabIndex={0}  // for keyboard accessibility
               onKeyDown={e => {
                 if (e.key === 'Enter' || e.key === ' ') {
-                  setSelectedAlert(el)
+                  onSelectAlert(el)
                 }
               }}
             >
@@ -106,15 +56,6 @@ const AlertGrid: React.FC = () => {
           ))}
         </tbody>
       </table>
-
-      {
-        selectedAlert && (
-          <AlertDetailsModal
-            alert={selectedAlert}
-            onClose={() => setSelectedAlert(null)}
-          />
-        )
-      }
     </div>
   )
 }
