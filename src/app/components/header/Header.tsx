@@ -72,7 +72,7 @@ const Header: React.FC<IHeader> = ({
             <select
               className="header__select"
               value={sortBy}
-              onChange={e => onSortChange(e.target.value)}
+              onChange={e => onSortChange(e.target.value as Filter)}
               aria-label="Sort alerts"
             >
               <option value="" disabled >Select a filter</option>
