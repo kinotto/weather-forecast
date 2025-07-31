@@ -12,7 +12,7 @@ import { applyAllFilters, formatDateLocal } from '@/app/utils/utility'
 const AlertGrid: React.FC = () => {
 
 
-  const { data, isLoading, isError} = useQuery<AlertResponse>({
+  const { data, isLoading, isError } = useQuery<AlertResponse>({
     queryKey: [],
     queryFn: getForecastApi,
     refetchOnWindowFocus: false,
@@ -74,7 +74,7 @@ const AlertGrid: React.FC = () => {
         </thead>
         <tbody>
           {filteredAlertFeatures.map((el: AlertFeature) => (
-            <tr 
+            <tr
               key={el.id}
               onClick={() => setSelectedAlert(el)}
               style={{ cursor: 'pointer' }}
@@ -92,10 +92,16 @@ const AlertGrid: React.FC = () => {
                   {el.properties.severity}
                 </div>
               </td>
-              <td>{el.properties.areaDesc}</td>
+              <td>{el.properties.areaDesc.length > 100
+                ? el.properties.areaDesc.slice(0, 100) + '...'
+                : el.properties.areaDesc}
+              </td>
               <td>{formatDateLocal(el.properties.effective)}</td>
               <td>{formatDateLocal(el.properties.expires)}</td>
-              <td>{el.properties.headline}</td>
+              <td>{(el.properties?.headline?.length || 0) > 100
+                ? (el.properties?.headline || "").slice(0, 100) + '...'
+                : el.properties?.headline}
+              </td>
             </tr>
           ))}
         </tbody>
