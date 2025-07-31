@@ -86,10 +86,10 @@ const Header: React.FC<IHeader> = ({
             <input
               type="search"
               className="header__search"
-              placeholder="Search alerts..."
+              placeholder="Search alert by event, area or headline..."
               value={searchQuery}
               onChange={e => onSearchChange(e.target.value)}
-              aria-label="Search alerts"
+              aria-label="Search alert by event, area or headline.."
             />
           </div>
         </div>
