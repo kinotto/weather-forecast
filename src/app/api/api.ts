@@ -1,6 +1,4 @@
 import config from '../config.json';
-import { AlertResponse } from '../model/alert';
-import { getRandomDate } from '../utils/utility';
 
 
 export const getForecastApi = async () => {

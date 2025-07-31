@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../../styles/datepicker.scss';
 import 'react-datepicker/dist/react-datepicker.css';
 import './Header.scss';
@@ -24,8 +24,8 @@ interface IHeader {
   onSearchChange: (value: string) => void,
   fromDate: Date | null,
   toDate: Date | null,
-  onFromChange: (date: Date | null, event: React.SyntheticEvent<any> | undefined) => void
-  onToChange: (date: Date | null, event: React.SyntheticEvent<any> | undefined) => void
+  onFromChange: (date: Date | null, event: React.SyntheticEvent | undefined) => void
+  onToChange: (date: Date | null, event: React.SyntheticEvent | undefined) => void
 }
 
 const Header: React.FC<IHeader> = ({
