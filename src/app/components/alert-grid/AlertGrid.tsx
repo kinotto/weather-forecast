@@ -11,52 +11,54 @@ interface IAlertGrid {
 const AlertGrid: React.FC<IAlertGrid> = ({ alerts, onSelectAlert }) => {
   return (
     <div className="alert-grid">
-      <table>
-        <thead>
-          <tr>
-            <th>Event</th>
-            <th>Severity</th>
-            <th>Area</th>
-            <th>Effective</th>
-            <th>Expires</th>
-            <th>Headline</th>
-          </tr>
-        </thead>
-        <tbody>
+      <div className="alert-grid__table">
+        <div className="alert-grid__header">
+          <div>Event</div>
+          <div>Severity</div>
+          <div>Area</div>
+          <div>Effective</div>
+          <div>Expires</div>
+          <div>Headline</div>
+        </div>
+        <div className="alert-grid__body">
           {alerts.map((el: AlertFeature) => (
-            <tr
+            <div
               key={el.id}
+              className="alert-grid__row"
               onClick={() => onSelectAlert(el)}
-              style={{ cursor: 'pointer' }}
-              aria-label={`View details for ${el.properties.event}`}
-              tabIndex={0}  // for keyboard accessibility
-              onKeyDown={e => {
+              tabIndex={0}
+              onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
-                  onSelectAlert(el)
+                  onSelectAlert(el);
                 }
               }}
             >
-              <td>{el.properties.event}</td>
-              <td>
-                <div className={`alert-grid-severity alert-grid-severity-${el.properties.severity.toLocaleLowerCase()}`}>
+              <div>{el.properties.event}</div>
+              <div>
+                <div
+                  className={`alert-grid-severity alert-grid-severity-${el.properties.severity.toLowerCase()}`}
+                >
                   {el.properties.severity}
                 </div>
-              </td>
-              <td>{el.properties.areaDesc.length > 100
-                ? el.properties.areaDesc.slice(0, 100) + '...'
-                : el.properties.areaDesc}
-              </td>
-              <td>{formatDateLocal(el.properties.effective)}</td>
-              <td>{formatDateLocal(el.properties.expires)}</td>
-              <td>{(el.properties?.headline?.length || 0) > 100
-                ? (el.properties?.headline || "").slice(0, 100) + '...'
-                : el.properties?.headline}
-              </td>
-            </tr>
+              </div>
+              <div>
+                {el.properties.areaDesc.length > 100
+                  ? el.properties.areaDesc.slice(0, 100) + '...'
+                  : el.properties.areaDesc}
+              </div>
+              <div>{formatDateLocal(el.properties.effective)}</div>
+              <div>{formatDateLocal(el.properties.expires)}</div>
+              <div>
+                {(el.properties?.headline?.length || 0) > 100
+                  ? (el.properties?.headline || '').slice(0, 100) + '...'
+                  : el.properties?.headline}
+              </div>
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+      </div>
     </div>
+
   )
 }
 
