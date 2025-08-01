@@ -3,6 +3,7 @@ import './AlertGrid.scss'
 import { AlertFeature } from '@/app/model/alert'
 import { formatDateLocal } from '@/app/utils/utility'
 import { FixedSizeList as List, ListChildComponentProps } from 'react-window'
+import { isMobile } from 'react-device-detect';
 
 interface IAlertGrid {
   alerts: Array<AlertFeature>,
@@ -10,6 +11,7 @@ interface IAlertGrid {
 }
 
 const ROW_HEIGHT = 100 // fixed row height in px (adjust if needed)
+const MAX_LENGTH_TEXT_AREA = isMobile ? 10 : 100;
 
 const AlertGrid: React.FC<IAlertGrid> = ({ alerts, onSelectAlert }) => {
 
@@ -41,15 +43,15 @@ const AlertGrid: React.FC<IAlertGrid> = ({ alerts, onSelectAlert }) => {
           </div>
         </div>
         <div role="gridcell">
-          {el.properties.areaDesc.length > 100
-            ? el.properties.areaDesc.slice(0, 100) + '...'
+          {el.properties.areaDesc.length > MAX_LENGTH_TEXT_AREA
+            ? el.properties.areaDesc.slice(0, MAX_LENGTH_TEXT_AREA) + '...'
             : el.properties.areaDesc}
         </div>
         <div role="gridcell">{formatDateLocal(el.properties.effective)}</div>
         <div role="gridcell">{formatDateLocal(el.properties.expires)}</div>
         <div role="gridcell">
-          {(el.properties?.headline?.length || 0) > 100
-            ? (el.properties?.headline || '').slice(0, 100) + '...'
+          {(el.properties?.headline?.length || 0) > MAX_LENGTH_TEXT_AREA
+            ? (el.properties?.headline || '').slice(0, MAX_LENGTH_TEXT_AREA) + '...'
             : el.properties?.headline}
         </div>
       </div>
