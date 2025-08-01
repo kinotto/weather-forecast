@@ -7,10 +7,8 @@ This project is a **React** client built with **Next.js** that displays weather 
 ## Features
 
 - Displays weather alerts in a responsive grid layout
-- Multiple filters to refine displayed alerts
 - Virtualized list rendering for efficient performance with large data sets
 - Accessibility-friendly keyboard navigation and ARIA labels
-- Date formatting and truncation for better readability
 - Added mobile responsiveness
 - Added unit tests
 - Added support for dark mode on macOS
