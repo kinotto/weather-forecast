@@ -40,7 +40,7 @@ describe('Header component', () => {
 
   it('calls onSearchChange when typing in the search input', () => {
     setup();
-    const searchInput = screen.getByLabelText(/search alerts/i);
+    const searchInput = screen.getByLabelText(/search/i);
     fireEvent.change(searchInput, { target: { value: 'storm' } });
     expect(mockOnSearchChange).toHaveBeenCalledWith('storm');
   });

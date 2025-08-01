@@ -3,9 +3,9 @@ import '../../styles/datepicker.scss';
 import 'react-datepicker/dist/react-datepicker.css';
 import './Header.scss';
 import DatePicker from 'react-datepicker';
-import Icon from '@/app/utils/Icon';
+import Icon from '@/app/components/icon/Icon';
 
-import InputReactDatePicker from '@/app/utils/InputReactDatePicker';
+import InputReactDatePicker from '@/app/components/input-react-date-picker/InputReactDatePicker';
 import { Filter } from '@/app/model/alert';
 
 const sortOptions = [

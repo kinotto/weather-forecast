@@ -14,12 +14,15 @@ import AlertGrid from '@/app/components/alert-grid/AlertGrid'
 
 const Home: React.FC = () => {
 
-  const { data, isLoading, isError } = useQuery<AlertResponse>({
+  const { data, isLoading } = useQuery<AlertResponse>({
     queryKey: [],
     queryFn: getForecastApi,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    refetchInterval: false
+    refetchInterval: 35000,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true
+    //refetchOnWindowFocus: false,
+    //refetchOnReconnect: false,
+    //refetchInterval: false
   })
   const [filteredAlertFeatures, setFilteredAlertFeatures] = useState<Array<AlertFeature>>([]);
   const [selectedAlert, setSelectedAlert] = React.useState<AlertFeature | null>(null);
@@ -28,11 +31,13 @@ const Home: React.FC = () => {
   const [toDate, setToDate] = useState<Date | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<Filter>(Filter.default);
 
-  useEffect(() => setFilteredAlertFeatures(data?.features || []), [data])
+  useEffect(() => {
+    // Filters need to be reapplied every time the API refetches data, since it automatically refetch every X seconds.
+    // If any filters are active, the filtering logic must be rerun after each fetch.
+    const filtered = applyAllFilters(data?.features || [], fromDate, toDate, selectedFilter, searchQuery);
+    setFilteredAlertFeatures(filtered)
+  }, [data])
 
-  if (isError) {
-    // show error
-  }
 
   if (isLoading) {
     return <Loader />
