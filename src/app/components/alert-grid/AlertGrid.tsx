@@ -15,7 +15,7 @@ const AlertGrid: React.FC<IAlertGrid> = ({ alerts, onSelectAlert }) => {
 
   const deviceType = useDeviceType();
 
-  const ROW_HEIGHT = 100 // fixed row height in px (adjust if needed)
+  const ROW_HEIGHT = 100
   const MAX_LENGTH_TEXT_AREA = deviceType === "mobile" ? 10 : deviceType === "tablet" ? 40 : 100;
 
   const shrinkText = (text: string) => {
