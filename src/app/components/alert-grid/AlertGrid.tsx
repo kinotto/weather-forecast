@@ -15,6 +15,10 @@ const MAX_LENGTH_TEXT_AREA = isMobile ? 10 : 100;
 
 const AlertGrid: React.FC<IAlertGrid> = ({ alerts, onSelectAlert }) => {
 
+  const shrinkText = (text: string) => {
+    return text.length > MAX_LENGTH_TEXT_AREA ? text.slice(0, MAX_LENGTH_TEXT_AREA) + '...' : text;
+  }
+
   // Row renderer for react-window, memoized for perf
   const Row = useCallback(({ index, style }: ListChildComponentProps) => {
     const el = alerts[index]
@@ -34,7 +38,7 @@ const AlertGrid: React.FC<IAlertGrid> = ({ alerts, onSelectAlert }) => {
         role="row"
         aria-label={`View details for ${el.properties.event}`}
       >
-        <div role="gridcell">{el.properties.event}</div>
+        <div role="gridcell">{shrinkText(el.properties.event)}</div>
         <div role="gridcell">
           <div
             className={`alert-grid-severity alert-grid-severity-${el.properties.severity.toLowerCase()}`}
@@ -43,16 +47,12 @@ const AlertGrid: React.FC<IAlertGrid> = ({ alerts, onSelectAlert }) => {
           </div>
         </div>
         <div role="gridcell">
-          {el.properties.areaDesc.length > MAX_LENGTH_TEXT_AREA
-            ? el.properties.areaDesc.slice(0, MAX_LENGTH_TEXT_AREA) + '...'
-            : el.properties.areaDesc}
+          {shrinkText(el.properties.areaDesc)}
         </div>
         <div role="gridcell">{formatDateLocal(el.properties.effective)}</div>
         <div role="gridcell">{formatDateLocal(el.properties.expires)}</div>
         <div role="gridcell">
-          {(el.properties?.headline?.length || 0) > MAX_LENGTH_TEXT_AREA
-            ? (el.properties?.headline || '').slice(0, MAX_LENGTH_TEXT_AREA) + '...'
-            : el.properties?.headline}
+          {shrinkText(el.properties.headline || "")}
         </div>
       </div>
     )

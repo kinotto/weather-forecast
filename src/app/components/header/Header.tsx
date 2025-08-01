@@ -75,7 +75,7 @@ const Header: React.FC<IHeader> = ({
               onChange={e => onSortChange(e.target.value as Filter)}
               aria-label="Sort alerts"
             >
-              <option value="" disabled >Select a filter</option>
+              <option value="" >Select a filter</option>
               {sortOptions.map(opt => (
                 <option key={opt.value} value={opt.value}>
                   {opt.label}
