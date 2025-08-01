@@ -3,17 +3,20 @@ import './AlertGrid.scss'
 import { AlertFeature } from '@/app/model/alert'
 import { formatDateLocal } from '@/app/utils/utility'
 import { FixedSizeList as List, ListChildComponentProps } from 'react-window'
-import { isMobile } from 'react-device-detect';
+import { useDeviceType } from '@/app/utils/hooks'
+
 
 interface IAlertGrid {
   alerts: Array<AlertFeature>,
   onSelectAlert: (el: AlertFeature) => void
 }
 
-const ROW_HEIGHT = 100 // fixed row height in px (adjust if needed)
-const MAX_LENGTH_TEXT_AREA = isMobile ? 10 : 100;
-
 const AlertGrid: React.FC<IAlertGrid> = ({ alerts, onSelectAlert }) => {
+
+  const deviceType = useDeviceType();
+
+  const ROW_HEIGHT = 100 // fixed row height in px (adjust if needed)
+  const MAX_LENGTH_TEXT_AREA = deviceType === "mobile" ? 10 : deviceType === "tablet" ? 40 : 100;
 
   const shrinkText = (text: string) => {
     return text.length > MAX_LENGTH_TEXT_AREA ? text.slice(0, MAX_LENGTH_TEXT_AREA) + '...' : text;
@@ -56,7 +59,7 @@ const AlertGrid: React.FC<IAlertGrid> = ({ alerts, onSelectAlert }) => {
         </div>
       </div>
     )
-  }, [alerts, onSelectAlert])
+  }, [alerts, onSelectAlert, deviceType])
 
   return (
     <div className="alert-grid" role="grid" aria-rowcount={alerts.length + 1}>
