@@ -44,3 +44,7 @@ npm run dev
 npm run test
 ```
 
+## 🚀 Live Demo
+
+The project has been deployed and can be tested here:  
+👉 [https://weather-forecast-k8vv.vercel.app/](https://weather-forecast-k8vv.vercel.app/)
