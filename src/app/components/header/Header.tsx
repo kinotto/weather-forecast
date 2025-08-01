@@ -4,9 +4,10 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './Header.scss';
 import DatePicker from 'react-datepicker';
 import Icon from '@/app/components/icon/Icon';
-
 import InputReactDatePicker from '@/app/components/input-react-date-picker/InputReactDatePicker';
 import { Filter } from '@/app/model/alert';
+import { useRouter } from 'next/navigation';
+
 
 const sortOptions = [
   { value: Filter.event, label: 'Sort by Event' },
@@ -39,15 +40,18 @@ const Header: React.FC<IHeader> = ({
   onToChange
 }) => {
 
+  const router = useRouter();
 
   return (
     <header className="header">
       <div className="header__container">
-        <div className="header__icon" aria-label="Weather icon" role="img" title="Weather">
-          <Icon />
+        <div onClick={() => router.push("/")}>
+          <div className="header__icon" aria-label="Weather icon" role="img" title="Weather">
+            <Icon />
+          </div>
+          <h1 className="header__title">Weather Forecast</h1>
         </div>
-        <h1 className="header__title">Weather Forecast</h1>
-
+        
         <div className="header__controls">
             {/* ...select and search */}
             <div className="header__date-picker__container">
